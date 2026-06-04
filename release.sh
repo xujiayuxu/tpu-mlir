@@ -53,9 +53,9 @@ export PATH=${TPUC_ROOT}/python/test:$PATH
 export PATH=${TPUC_ROOT}/python/samples:$PATH
 export PATH=${TPUC_ROOT}/customlayer/python:$PATH
 # export LD_LIBRARY_PATH=$TPUC_ROOT/lib:$LD_LIBRARY_PATH
-export PPL_PROJECT_ROOT=${TPUC_ROOT}/ppl
-export PPL_BUILD_PATH=$PPL_PROJECT_ROOT/build
-export PPL_INSTALL_PATH=$PPL_PROJECT_ROOT/install
+export PPL_PROJECT_ROOT=${TPUC_ROOT}/cross_toolchains/ppl_compile
+export PPL_BUILD_PATH=${TPUC_ROOT}/build/ppl
+export PPL_INSTALL_PATH=${TPUC_ROOT}/install
 export PPL_RUNTIME_PATH=$PPL_PROJECT_ROOT/deps
 export PPL_THIRD_PARTY_PATH=$PPL_PROJECT_ROOT/third_party
 export PATH=$PPL_PROJECT_ROOT/bin:$PATH
@@ -78,6 +78,7 @@ function use_chip(){
     export USING_CMODEL=False
     export LD_LIBRARY_PATH=$CHIP_LD_LIBRARY_PATH
 }
+echo "Environment setup complete. You can now use the tools in this directory. If you want to edit ppl operators, please download toolchains by './download_toolchains.sh all'"
 //MY_CODE_STREAM
 # ------------------------------------------------------------------------------
 

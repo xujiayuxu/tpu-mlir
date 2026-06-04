@@ -292,7 +292,7 @@ void ScaledDotProductAttention::setup(float *query, float *keys, float *values,
       ->setup(query, keys, nullptr, qk, batch_, head_, query_len_, hidden_dim_,
               seq_len_, 0, -1, 0, 0, 1, 0, 0, 0);
   binary = nullptr;
-  if (masks == nullptr && masks != reinterpret_cast<float *>(0x0)) {
+  if (masks != nullptr) {
     p_binary = new float[batch_ * head_ * query_len_ * seq_len_];
     binary = new Binary();
     (*(Binary *)binary)

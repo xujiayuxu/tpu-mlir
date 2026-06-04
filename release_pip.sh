@@ -114,11 +114,9 @@ done
 
 # remove docs
 rm -rf ${release_archive}/docs
-rm -rf ${release_archive}/ppl/doc
 
-# remove redundant .so files
-rm ${release_archive}/lib/libortools.so
-rm ${release_archive}/lib/libortools.so.9.8.3296
+# remove compile-time linker symlink (runtime needs .so.9 and .so.9.8.3296)
+# The symlink chain is preserved by CMakeLists.txt cp -a, so no .so removal needed
 rm ${release_archive}/lib/*.a
 
 # collect_oneDNN_dependence

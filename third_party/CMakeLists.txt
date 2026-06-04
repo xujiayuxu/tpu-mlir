@@ -36,9 +36,7 @@ install(FILES nntoolchain/lib/libbackend_bm1684.so
               nntoolchain/lib/libtpuv7_modelrt.so
               nntoolchain/lib/libcdm_daemon_emulator.so
               nntoolchain/lib/libtpuv7_scalar_emulator.so
-              or-tools/lib/libortools.so
-              or-tools/lib/libortools.so.9
-              or-tools/lib/libortools.so.9.8.3296
+              # or-tools: installed via CODE block below to preserve symlinks
               # tpu-train/lib/libsgdnn.so
 
               # cvitek
@@ -49,11 +47,22 @@ install(FILES nntoolchain/lib/libbackend_bm1684.so
               atomic_exec/libbm1684x_atomic_kernel.so
         DESTINATION lib)
 
+# Install or-tools preserving symlinks
+install(CODE "
+        execute_process(COMMAND cp -a
+                        ${CMAKE_CURRENT_SOURCE_DIR}/or-tools/lib/libortools.so
+                        ${CMAKE_CURRENT_SOURCE_DIR}/or-tools/lib/libortools.so.9
+                        ${CMAKE_CURRENT_SOURCE_DIR}/or-tools/lib/libortools.so.9.8.3296
+                        \${CMAKE_INSTALL_PREFIX}/lib/)
+        ")
+
 # install(DIRECTORY ppl
 #         DESTINATION ${CMAKE_INSTALL_PREFIX}
 #         PATTERN "*.sh" PERMISSIONS OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE
 #         PATTERN "ppl-compile" PERMISSIONS OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE)
-# if using install(DIRECTORY), the files will miss access priority
-install(CODE "
-        execute_process(COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/ppl ${CMAKE_INSTALL_PREFIX}/)
-")
+# PPL is now downloaded to cross_toolchains/ppl_compile at build time,
+# no longer vendored in third_party/ppl. The install step is handled
+# by lib/PplBackend/build.sh which copies from PPL_PROJECT_ROOT.
+# install(CODE "
+#         execute_process(COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/ppl ${CMAKE_INSTALL_PREFIX}/)
+#         ")

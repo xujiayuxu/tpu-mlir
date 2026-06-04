@@ -25,9 +25,9 @@ export PATH=$PROJECT_ROOT/python/samples:$PATH
 export PATH=$PROJECT_ROOT/customlayer/python:$PATH
 export PATH=$PROJECT_ROOT/customlayer/test:$PATH
 
-export PPL_PROJECT_ROOT=${PROJECT_ROOT}/ppl
-export PPL_BUILD_PATH=$PPL_PROJECT_ROOT/build
-export PPL_INSTALL_PATH=$PPL_PROJECT_ROOT/install
+export PPL_PROJECT_ROOT=${PROJECT_ROOT}/cross_toolchains/ppl_compile
+export PPL_BUILD_PATH=$PROJECT_ROOT/build/ppl
+export PPL_INSTALL_PATH=$PROJECT_ROOT/install
 export PPL_RUNTIME_PATH=$PPL_PROJECT_ROOT/deps
 export PPL_THIRD_PARTY_PATH=$PPL_PROJECT_ROOT/third_party
 export PATH=$PPL_PROJECT_ROOT/bin:$PATH
@@ -39,3 +39,4 @@ export PYTHONPATH=$RELEASE_PATH/python/:$PYTHONPATH
 export PYTHONPATH=$RELEASE_PATH/lib/:$PYTHONPATH
 export PYTHONPATH=$RELEASE_PATH/customlayer/python:$PYTHONPATH
 
+echo "Environment setup complete. You can now use the tools in this directory. If you want to edit ppl operators, please download toolchains by './download_toolchains.sh all'"

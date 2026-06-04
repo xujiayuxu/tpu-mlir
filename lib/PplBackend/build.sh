@@ -32,7 +32,7 @@ clean_cache() {
 }
 
 clean_up() {
-  local build_dir=${1:-build}
+  local build_dir=${1:-$PPL_BUILD_PATH}
   rm -rf "$build_dir"
   mkdir -p "$build_dir"
 }
@@ -40,12 +40,12 @@ clean_up() {
 # Ensure the target lib directory exists
 mkdir -p "${INSTALL_PATH}/lib"
 
-# Parallel ppl-compile over all *.pl files in ../src
+# Parallel ppl-compile over all *.pl files in PplBackend/src
 # Args: chip [extra ppl-compile flags...]
 ppl_compile_all() {
   local chip=$1
   shift
-  ls ../src/*.pl | xargs -n1 -P"${CPU_NUM}" -I{} \
+  ls "$DIR"/src/*.pl | xargs -n1 -P"${CPU_NUM}" -I{} \
     ppl-compile {} --chip "$chip" --mode 5 --O2 --o . "$@"
 }
 
@@ -85,7 +85,7 @@ fi
 # get latest nntoolchain version
 lib_changed=false
 NNTC_LIB_PATH=${PROJECT_ROOT}/third_party/nntoolchain/lib
-PPL_VER_PATH=${PROJECT_ROOT}/third_party/ppl/version
+PPL_VER_PATH=${PPL_PROJECT_ROOT}/version
 LIBS=("libcmodel_bm1684x.a"  "libbm1684x_kernel_module.a"
       "libcmodel_bm1688.a"   "libbmtpulv60_kernel_module.a"
       "libcmodel_bm1690.a"   "libbm1690_kernel_module.a"
@@ -111,20 +111,21 @@ if [ "$lib_changed" = false ] && [ "$file_changed" = false ]; then
   exit 0
 fi
 # build ppl libs and install directly to INSTALL_PATH
-echo "rebuilding ppl..."
-pushd "$DIR"
+PPL_BUILD_PATH=${PPL_BUILD_PATH:-"$PROJECT_ROOT/build/ppl"}
+echo "rebuilding ppl in $PPL_BUILD_PATH"
+mkdir -p "$PPL_BUILD_PATH"
 # wipe ppl compile cache ONCE for the whole rebuild (not per-chip)
 clean_cache
 # dyn pio
 chips=("bm1684x" "bm1688" "bm1690" "sg2260e" "bm1684x2")
 for chip in "${chips[@]}"; do
-  build_dir="build_${chip}_dyn"
+  build_dir="${PPL_BUILD_PATH}/build_${chip}_dyn"
   clean_up "$build_dir"
   pushd "$build_dir"
   ppl_compile_all "$chip"
-  cmake ../ ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${chip} -DCMODEL=ON -DBUILD_DIR=${build_dir}
+  cmake "$DIR" ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${chip} -DCMODEL=ON -DBUILD_DIR=${build_dir}
   make -j${CPU_NUM} install
-  cmake ../ ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${chip} -DCMODEL=OFF -DBUILD_DIR=${build_dir} -DBUILD_DYN_HOST=ON
+  cmake "$DIR" ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${chip} -DCMODEL=OFF -DBUILD_DIR=${build_dir} -DBUILD_DYN_HOST=ON
   make -j${CPU_NUM} install
   popd
 done
@@ -132,23 +133,24 @@ done
 chips_rvti=("sg2260e")
 for chip in "${chips_rvti[@]}"; do
   name="${chip}rv"
-  build_dir="build_${name}_dyn"
+  build_dir="${PPL_BUILD_PATH}/build_${name}_dyn"
   clean_up "$build_dir"
   pushd "$build_dir"
   ppl_compile_all "$chip" --rv
-  cmake ../ ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${name} -DCMODEL=ON -DBUILD_DIR=${build_dir}
+  cmake "$DIR" ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${name} -DCMODEL=ON -DBUILD_DIR=${build_dir}
   make -j${CPU_NUM} install
-  cmake ../ ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${name} -DCMODEL=OFF -DBUILD_DIR=${build_dir}
+  cmake "$DIR" ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=OFF -DCHIP=${name} -DCMODEL=OFF -DBUILD_DIR=${build_dir}
   make -j${CPU_NUM} install
   popd
 done
 
 # static
-clean_up
-pushd build
-ls ../src/*.pl | xargs -n1 -P"${CPU_NUM}" -I{} \
+build_dir="${PPL_BUILD_PATH}/build"
+clean_up "$build_dir"
+pushd "$build_dir"
+ls "$DIR"/src/*.pl | xargs -n1 -P"${CPU_NUM}" -I{} \
   ppl-compile {} --I "$PPL_PROJECT_ROOT/inc" --desc --O2 --o .
-cmake ../ ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=ON
+cmake "$DIR" ${DEBUG_FLAG} -DCMAKE_INSTALL_PREFIX="${TPUC_ROOT}" -DBUILD_STATIC=ON -DBUILD_DIR=${build_dir}
 make -j${CPU_NUM} install
 popd
 

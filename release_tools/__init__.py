@@ -22,6 +22,8 @@ def join_path(*args):
 
 
 # env path init
+ppl_path = f"{package_path}/cross_toolchains/ppl_compile"
+
 new_path = [
     f"{package_path}/bin",
     f"{package_path}/python/tools",
@@ -29,7 +31,7 @@ new_path = [
     f"{package_path}/python/test",
     f"{package_path}/python/samples",
     f"{package_path}/customlayer/python",
-    f"{package_path}/ppl/bin",
+    f"{ppl_path}/bin",
 ]
 os.environ["PATH"] = join_path(*new_path, os.getenv("PATH"))
 os.environ["PYTHONPATH"] = join_path(
@@ -41,9 +43,9 @@ os.environ["PYTHONPATH"] = join_path(
 )
 os.environ.setdefault("OMP_NUM_THREADS", "4")
 os.environ.setdefault("TPUC_ROOT", package_path)
-os.environ.setdefault("PPL_PROJECT_ROOT", f"{package_path}/ppl")
-os.environ.setdefault("PPL_BUILD_PATH", f"{package_path}/ppl/build")
-os.environ.setdefault("PPL_RUNTIME_PATH", f"{package_path}/ppl/deps")
+os.environ.setdefault("PPL_PROJECT_ROOT", ppl_path)
+os.environ.setdefault("PPL_BUILD_PATH", f"{package_path}/build/ppl")
+os.environ.setdefault("PPL_RUNTIME_PATH", f"{ppl_path}/deps")
 
 os.environ["LD_LIBRARY_PATH"] = join_path(
     f"{package_path}/lib",
@@ -51,12 +53,8 @@ os.environ["LD_LIBRARY_PATH"] = join_path(
     f"{package_path}/lib/third_party",
     os.getenv("LD_LIBRARY_PATH"),
 )
-os.environ.setdefault(
-    "TPUKERNEL_CUSTOM_FIRMWARE_PATH", f"{package_path}/lib/libcmodel_custom.so"
-)
-os.environ.setdefault(
-    "CUSTOM_LAYER_UNITTEST_DIR", f"{package_path}/customlayer/test_if/unittest"
-)
+os.environ.setdefault("TPUKERNEL_CUSTOM_FIRMWARE_PATH", f"{package_path}/lib/libcmodel_custom.so")
+os.environ.setdefault("CUSTOM_LAYER_UNITTEST_DIR", f"{package_path}/customlayer/test_if/unittest")
 
 # set python package searching path
 sys.path.append(f"{package_path}/")

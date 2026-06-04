@@ -3,7 +3,7 @@ Implementing Backend Operators with PPL
 
 PPL (Programming Language for TPUs) is a domain-specific programming language (DSL) based on C/C++ syntax extensions, designed for programming Tensor Processing Units (TPUs). This chapter demonstrates how to implement backend operators in PPL using the ``add_const_fp`` operator as an example, illustrating the compilation and utilization of PPL code within TPU-MLIR.
 
-The implementation of PPL backend operators can be found in the ``tpu-mlir/lib/PplBackend/src`` directory. For release packages, it will be located in the ``PplBackend/src`` directory of the TPU-MLIR release package. For detailed instructions on writing PPL source code, refer to the documentation in ``tpu-mlir/third_party/ppl/doc``.
+The implementation of PPL backend operators can be found in the ``tpu-mlir/lib/PplBackend/src`` directory. For release packages, it will be located in the ``PplBackend/src`` directory of the TPU-MLIR release package. For detailed instructions on writing PPL source code, refer to the documentation in ``tpu-mlir/cross_toolchains/ppl_compile/doc``.
 
 How to Write and Call Backend Operators
 -----------------------------------------
@@ -151,7 +151,7 @@ This completes the implementation of the backend operator.
 PPL Workflow in TPU-MLIR
 -------------------------
 
-1. Place the PPL compiler in the ``third_party/ppl`` directory and update it by referring to the README.md file in this directory.
+1. The PPL compiler is stored in the ``cross_toolchains/ppl_compile`` directory and downloaded on demand by ``download_toolchains.sh``. To update the PPL version, modify the ``PPL_VERSION`` and ``PPL_URL`` variables in ``download_toolchains.sh`` and re-run it.
 2. Integrate the PPL source code compilation in ``model_deploy.py``. The process is illustrated in the following diagram:
 
 .. _ppl_flow:

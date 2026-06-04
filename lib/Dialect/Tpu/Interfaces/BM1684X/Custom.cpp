@@ -109,8 +109,10 @@ int64_t tpu::CustomOp::dyn_codegen_global_bm1684x(void *buffer) {
   if (buffer) {
     char *p = (char *)buffer;
     tpu_param_t info = {0};
-    assert(getName().str().size() <= CUSTOM_LAYER_NAME_LEN);
-    std::strcpy(info.name, getName().str().c_str());
+    auto name = getName().str();
+    assert(name.size() <= CUSTOM_LAYER_NAME_LEN);
+    std::strncpy(info.name, name.c_str(), CUSTOM_LAYER_NAME_LEN);
+    info.name[CUSTOM_LAYER_NAME_LEN] = '\0';
     info.param_size = param_size;
     memcpy(p, &info, sizeof(info));
     p += sizeof(info);
@@ -132,8 +134,10 @@ int64_t tpu::CustomOp::dyn_codegen_local_bm1684x(void *buffer) {
   if (buffer) {
     char *p = (char *)buffer;
     tpu_param_t info = {0};
-    assert(getName().str().size() <= CUSTOM_LAYER_NAME_LEN);
-    std::strcpy(info.name, getName().str().c_str());
+    auto name = getName().str();
+    assert(name.size() <= CUSTOM_LAYER_NAME_LEN);
+    std::strncpy(info.name, name.c_str(), CUSTOM_LAYER_NAME_LEN);
+    info.name[CUSTOM_LAYER_NAME_LEN] = '\0';
     info.param_size = param_size;
     memcpy(p, &info, sizeof(info));
     p += sizeof(info);

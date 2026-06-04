@@ -190,6 +190,7 @@ static void encrypt_or_decrypt_bmodel(ModelGen &model_gen,
         } else {
           new_binary = model_gen.WriteBinary(binary->size(), buffer);
         }
+        delete[] buffer;
       } else if (is_encrypt == false) {
         uint64_t de_size = 0;
         auto de_buffer = model_ctx->read_binary_with_decrypt(binary, &de_size);
@@ -450,7 +451,7 @@ static void dump_kernel_module(int argc, char **argv) {
     if (!ofile) {
       FATAL("save file[%s] failed\n", save_name.c_str());
     }
-    std::unique_ptr<uint8_t> binary(new uint8_t[binary_size]);
+    std::unique_ptr<uint8_t[]> binary(new uint8_t[binary_size]);
     model_ctx.read_binary(module_binary, binary.get());
     ofile.write((char *)binary.get(), binary_size);
     cout << "Success: dump kernel_module to [" << save_name << "]." << endl;

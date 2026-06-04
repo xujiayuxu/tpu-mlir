@@ -134,7 +134,7 @@ include_directories(
   ${TPUKERNEL_TOP}/kernel/include
   ${CUS_TOP}/host/include
   ${CUS_TOP}/dev/utils/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_DIR}/device
+  ${BUILD_DIR_ABS}/device
 )
 
 # Set the library directories for the shared library (link tpu-mlir's)

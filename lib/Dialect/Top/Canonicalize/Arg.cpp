@@ -102,10 +102,12 @@ struct TopTransposeArg : public OpRewriterPatternEx<ArgOp> {
     auto permuteOp = cast<PermuteOp>(formerOp);
     auto old_axis = op.getAxis();
     auto permute_order = module::getI64Array(permuteOp.getOrder());
-    auto permute_order_len = permute_order->size();
-    int order_mask[permute_order_len - 1];
+    size_t permute_order_len = permute_order->size();
+    if (permute_order_len == 0) {
+      return failure();
+    }
+    std::vector<int> order_mask(permute_order_len - 1, 0);
     auto Keepdim = op.getKeepdims();
-    memset(order_mask, 0, sizeof(int) * (permute_order_len - 1));
     int order_dim = 0;
     for (int i = 0; i < permute_order_len; i++) {
       if (i == old_axis)

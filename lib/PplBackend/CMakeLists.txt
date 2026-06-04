@@ -4,6 +4,13 @@ project(PplJitHost LANGUAGES C CXX)
 option(BUILD_STATIC "Build as static library (default)" ON)
 option(BUILD_DYN_HOST "Build as static library (default)" OFF)
 set(BUILD_DIR "build" CACHE STRING "Build directory")
+# Resolve BUILD_DIR to an absolute path so that both relative and absolute
+# values work correctly with include_directories / aux_source_directory.
+if(IS_ABSOLUTE "${BUILD_DIR}")
+  set(BUILD_DIR_ABS "${BUILD_DIR}")
+else()
+  set(BUILD_DIR_ABS "${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_DIR}")
+endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -37,8 +44,8 @@ include_directories(${HOST_TOP}/include)
 include_directories($ENV{PROJECT_ROOT}/include)
 include_directories($ENV{TPUC_ROOT}/include)
 include_directories(include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_DIR}/include)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_DIR}/host PL_SRC)
+include_directories(${BUILD_DIR_ABS}/include)
+aux_source_directory(${BUILD_DIR_ABS}/host PL_SRC)
 
 # compile cpp
 aux_source_directory(src TILING_SRC)

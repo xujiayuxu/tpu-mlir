@@ -217,6 +217,7 @@ public:
                  operand.getOwner() == reduceOp;
         });
       }
+      delete[] input_shape;
     }
 
     return success();
@@ -419,6 +420,8 @@ public:
             store_mode, 0, buffer_size_ptr,
             (CMD_ID_NODE *)BM1684::instance()->cmdid_node);
       } else {
+        delete[] input_shape;
+        delete[] order;
         UNREACHABLE_OP("Not Implemented", permuteOp);
         return failure();
       }

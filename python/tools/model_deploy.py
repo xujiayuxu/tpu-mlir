@@ -372,9 +372,9 @@ class DeployTool:
                 "NEED_DUMP_DYNAMIC_LAYER_OUTPUT_DATA"] == "1":
             if self.chip in ("bm1684x", "bm1688") and self.state != "TOP_QUANTIZED":
                 dyn_layer_out_data_path = "./.tmp"
-                os.system(f"export DYNAMIC_LAYER_OUTPUT_DATA_PATH={dyn_layer_out_data_path}")
-                os.system("export DYNAMIC_LAYER_OUTPUT_ID_DICT_PATH={}".format(
-                    os.path.join(dyn_layer_out_data_path, "id_dict")))
+                os.environ["DYNAMIC_LAYER_OUTPUT_DATA_PATH"] = dyn_layer_out_data_path
+                os.environ["DYNAMIC_LAYER_OUTPUT_ID_DICT_PATH"] = os.path.join(
+                    dyn_layer_out_data_path, "id_dict")
                 if not os.path.exists(dyn_layer_out_data_path):
                     os.makedirs(dyn_layer_out_data_path)
                 else:

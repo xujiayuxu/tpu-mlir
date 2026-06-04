@@ -81,6 +81,8 @@ cmake --build "$BUILD_PATH" --target passes_json_files builder_python install_pa
 # build ppl code (after main install so INSTALL_PATH/lib/ is ready)
 bash lib/PplBackend/build.sh ${PPL_BUILD_TYPE}
 
+cp ${PROJECT_ROOT}/download_toolchains.sh ${INSTALL_PATH}/
+
 # Clean up some files for release build
 if [ "$1" != "DEBUG" ]; then
   # build doc
