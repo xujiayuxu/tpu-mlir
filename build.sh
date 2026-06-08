@@ -81,7 +81,17 @@ cmake --build "$BUILD_PATH" --target passes_json_files builder_python install_pa
 # build ppl code (after main install so INSTALL_PATH/lib/ is ready)
 bash lib/PplBackend/build.sh ${PPL_BUILD_TYPE}
 
-cp ${PROJECT_ROOT}/download_toolchains.sh ${INSTALL_PATH}/
+# copy ppl_compile to install dir
+mkdir -p ${INSTALL_PATH}/cross_toolchains
+cp -r ${PPL_PROJECT_ROOT} ${INSTALL_PATH}/cross_toolchains/
+pushd ${INSTALL_PATH}/cross_toolchains/ppl_compile
+rm -rf doc dist samples examples docker python runtime/bm1690/tpuv7-runtime* requirements.txt envsetup.sh
+find .  -name "*.so*" -exec rm -f {} +
+find .  -name "*.a" -exec rm -f {} +
+[ -d bin ] && chmod +x bin/*
+popd
+
+
 
 # Clean up some files for release build
 if [ "$1" != "DEBUG" ]; then

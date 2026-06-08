@@ -16,8 +16,10 @@ release_archive="./tpu-mlir_${mlir_version}"
 rm -rf ${release_archive}*
 cp -rf ${INSTALL_PATH} ${release_archive}
 
-cp -rf ${PROJECT_ROOT}/regression ${release_archive}
-rm -rf ${release_archive}/regression/model
+rsync -a --exclude='__pycache__' --exclude='*.pyc' \
+    --exclude='model' --exclude='regression_out' \
+    --exclude='regression_op_log' --exclude='tmp' \
+    ${PROJECT_ROOT}/regression/ ${release_archive}/regression/
 cp -rf ${PROJECT_ROOT}/third_party/customlayer ${release_archive}
 cp -rf ${PROJECT_ROOT}/python/tools/soc_infer ${release_archive}/python/tools/
 
@@ -78,7 +80,8 @@ function use_chip(){
     export USING_CMODEL=False
     export LD_LIBRARY_PATH=$CHIP_LD_LIBRARY_PATH
 }
-echo "Environment setup complete. You can now use the tools in this directory. If you want to edit ppl operators, please download toolchains by './download_toolchains.sh all'"
+rm -rf ~/.ppl/cache
+echo "Environment setup complete."
 //MY_CODE_STREAM
 # ------------------------------------------------------------------------------
 

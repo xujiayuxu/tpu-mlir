@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 # PPL compiler version and download URL
 # Update these when a new PPL release is needed
 PPL_VERSION="v1.7.17-gad6b3a3a-20260210"
@@ -16,7 +16,7 @@ function usage() {
   echo "  all         Download everything (default when no target is specified)"
   echo ""
   echo "Options:"
-  echo "  --dir PATH  Set download directory (default: \$PROJECT_ROOT/cross_toolchains)"
+  echo "  --dir PATH  Set download directory (default: \$DIR/cross_toolchains)"
   echo "  -h, --help  Show this help message"
 }
 
@@ -151,7 +151,7 @@ for t in "${EXPANDED_TARGETS[@]}"; do
 done
 
 # Set download directory
-CROSS_TOOLCHAINS=${CROSS_TOOLCHAINS:-${PROJECT_ROOT}/cross_toolchains}
+CROSS_TOOLCHAINS=${CROSS_TOOLCHAINS:-${DIR}/cross_toolchains}
 
 mkdir -p "${CROSS_TOOLCHAINS}"
 pushd "${CROSS_TOOLCHAINS}"

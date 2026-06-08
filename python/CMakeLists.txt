@@ -99,6 +99,8 @@ install(
   USE_SOURCE_PERMISSIONS
   PATTERN "test_onnx.py"
   PATTERN "test_tpulang.py"
+  PATTERN "test_mlir.py"
+  PATTERN "test_torch.py"
 )
 
 install(CODE "

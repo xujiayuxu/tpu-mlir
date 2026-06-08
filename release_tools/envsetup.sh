@@ -39,4 +39,4 @@ export PYTHONPATH=$RELEASE_PATH/python/:$PYTHONPATH
 export PYTHONPATH=$RELEASE_PATH/lib/:$PYTHONPATH
 export PYTHONPATH=$RELEASE_PATH/customlayer/python:$PYTHONPATH
 
-echo "Environment setup complete. You can now use the tools in this directory. If you want to edit ppl operators, please download toolchains by './download_toolchains.sh all'"
+echo "Environment setup complete."

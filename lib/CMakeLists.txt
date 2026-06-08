@@ -29,6 +29,6 @@ add_mlir_library(TPUMLIRInitAll
 # install(DIRECTORY PplBackend
 #         DESTINATION ${CMAKE_INSTALL_PREFIX}
 #         PATTERN "*.sh" PERMISSIONS OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE)
-install(CODE "
-  execute_process(COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/PplBackend ${CMAKE_INSTALL_PREFIX}/)
-")
+# install(CODE "
+#   execute_process(COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/PplBackend ${CMAKE_INSTALL_PREFIX}/)
+# ")
